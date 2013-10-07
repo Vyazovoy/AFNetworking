@@ -52,6 +52,17 @@ static dispatch_group_t http_request_operation_completion_group() {
 
 @implementation AFHTTPRequestOperation
 
+- (instancetype)initWithRequest:(NSURLRequest *)urlRequest {
+    self = [super initWithRequest:urlRequest];
+    if (!self) {
+        return nil;
+    }
+
+    self.responseSerializer = [AFJSONResponseSerializer serializer];
+
+    return self;
+}
+
 - (void)setResponseSerializer:(AFHTTPResponseSerializer <AFURLResponseSerialization> *)responseSerializer {
     NSParameterAssert(responseSerializer);
 
@@ -123,9 +134,7 @@ static dispatch_group_t http_request_operation_completion_group() {
 #pragma mark - NSCoding
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
-    NSURLRequest *request = [aDecoder decodeObjectForKey:@"request"];
-
-    self = [self initWithRequest:request];
+    self = [super initWithCoder:aDecoder];
     if (!self) {
         return nil;
     }
